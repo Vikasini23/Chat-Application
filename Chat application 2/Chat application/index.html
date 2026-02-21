@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURORA | Next-Gen Chat Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --p-1: #ff0080;
+            --p-2: #7928ca;
+            --p-3: #ff4d4d;
+            --s-1: #0070f3;
+            --s-2: #00dfd8;
+            --bg-dark: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --radius: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Sora', sans-serif;
+        }
+
+        body {
+            background: var(--bg-dark);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+        }
+
+        /* --- STUNNING ANIMATED MESH BACKGROUND --- */
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #050505;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 50%, hsla(339, 49%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 100%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+            filter: blur(80px);
+            opacity: 0.8;
+            animation: meshFlow 20s infinite alternate;
+        }
+
+        @keyframes meshFlow {
+            0% {
+                transform: scale(1);
+                rotate: 0deg;
+            }
+
+            50% {
+                transform: scale(1.1);
+                rotate: 2deg;
+            }
+
+            100% {
+                transform: scale(1);
+                rotate: 0deg;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- AUTH CARD: VIBRANT & GLOSSY --- */
+        .auth-view {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 4rem 3rem;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            animation: cardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .auth-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--s-2) 0%, var(--s-1) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(0, 223, 216, 0.3));
+        }
+
+        .auth-card h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #fff, #888);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .auth-card p {
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+        }
+
+        .auth-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .field-box {
+            position: relative;
+        }
+
+        .field-box input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 18px 25px;
+            border-radius: 20px;
+            color: white;
+            font-size: 1.05rem;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .field-box input:focus {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--s-1);
+            box-shadow: 0 0 0 1px var(--s-1), 0 0 30px rgba(0, 112, 243, 0.2);
+        }
+
+        .btn-join {
+            width: 100%;
+            padding: 1.2rem;
+            border-radius: 20px;
+            border: none;
+            background: #ffffff;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-join:hover {
+            transform: scale(1.02);
+            background: var(--s-2);
+            color: #000;
+            box-shadow: 0 15px 30px rgba(0, 223, 216, 0.3);
+        }
+
+        /* --- MAIN APP: MODERN DASHBOARD --- */
+        .app-container {
+            width: 96vw;
+            height: 94vh;
+            max-width: 1500px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.4);
+            animation: appScale 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes appScale {
+            from {
+                opacity: 0;
+                transform: scale(1.05);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .nav-sidebar {
+            width: 340px;
+            background: rgba(0, 0, 0, 0.2);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            padding: 2.5rem;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 4rem;
+        }
+
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--p-1), var(--p-2));
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 15px var(--p-2);
+        }
+
+        .brand-logo i {
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .brand-box h2 {
+            font-weight: 800;
+            letter-spacing: -1px;
+            font-size: 1.8rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+        }
+
+        .room-pill {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .room-pill.active {
+            background: linear-gradient(to right, rgba(0, 112, 243, 0.1), transparent);
+            border-color: var(--s-1);
+        }
+
+        .room-pill i {
+            font-size: 1.2rem;
+            color: var(--s-1);
+        }
+
+        .user-card {
+            margin-top: auto;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .user-flex {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .user-pfp {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--s-1), var(--s-2));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .btn-logout {
+            width: 100%;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            color: #ff4d4d;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        /* --- CHAT AREA: GLASSY & VIBRANT --- */
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(circle at 100% 100%, rgba(0, 112, 243, 0.05), transparent 40%);
+        }
+
+        .chat-header {
+            height: 100px;
+            padding: 0 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .header-left h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .header-left p {
+            font-size: 0.9rem;
+            color: var(--s-2);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chat-feed {
+            flex: 1;
+            padding: 2.5rem 3rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .msg-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 75%;
+            animation: msgPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes msgPop {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .msg-container.own {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+
+        .msg-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+            margin-left: 8px;
+        }
+
+        .msg-container.own .msg-name {
+            margin-left: 0;
+            margin-right: 8px;
+        }
+
+        .msg-bubble {
+            padding: 16px 24px;
+            border-radius: 28px;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .msg-container.own .msg-bubble {
+            background: linear-gradient(135deg, var(--s-1) 0%, var(--p-2) 100%);
+            border: none;
+            color: white;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0, 112, 243, 0.3);
+        }
+
+        .msg-container.other .msg-bubble {
+            border-bottom-left-radius: 5px;
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .msg-time {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-top: 8px;
+        }
+
+        .sys-notif {
+            align-self: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 24px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- COMPOSER: NEON GLASS --- */
+        .chat-footer {
+            padding: 2rem 3rem 3rem;
+        }
+
+        .input-bar {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+
+        .input-bar:focus-within {
+            border-color: var(--s-2);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 40px rgba(0, 223, 216, 0.1);
+        }
+
+        .tool-btns {
+            display: flex;
+            gap: 8px;
+            padding-left: 10px;
+        }
+
+        .tool-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            border: none;
+            background: transparent;
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tool-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--s-2);
+            transform: translateY(-2px);
+        }
+
+        #message-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 15px 5px;
+            font-size: 1.1rem;
+            outline: none;
+            font-weight: 500;
+        }
+
+        .btn-shoot {
+            width: 50px;
+            height: 50px;
+            border-radius: 18px;
+            border: none;
+            background: #ffffff;
+            color: #000;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-shoot:hover {
+            transform: scale(1.1) rotate(-5deg);
+            background: var(--s-2);
+            box-shadow: 0 10px 25px rgba(0, 223, 216, 0.4);
+        }
+
+        /* --- UTILS --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 900px) {
+            .nav-sidebar {
+                display: none;
+            }
+
+            .app-container {
+                width: 100vw;
+                height: 100vh;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mesh-bg"></div>
+
+    <!-- AUTH SECTION -->
+    <div id="auth-view" class="auth-view">
+        <div class="auth-card">
+            <div class="auth-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+            <h1>AURORA</h1>
+            <p>Step into the most vibrant chat dimension.</p>
+
+            <div class="auth-inputs">
+                <div class="field-box">
+                    <input type="text" id="username-input" placeholder="Choose a name..." maxlength="15">
+                </div>
+                <div class="field-box">
+                    <input type="text" id="room-input" placeholder="Enter Room..." maxlength="20" value="General">
+                </div>
+            </div>
+
+            <button class="btn-join" onclick="joinChat()">Let's Go <i class="fas fa-arrow-right"></i></button>
+            <div id="login-error" style="color: #ff4d4d; margin-top: 2rem; font-weight: 600; font-size: 0.9rem;"></div>
+        </div>
+    </div>
+
+    <!-- CHAT SECTION -->
+    <div id="app-view" class="hidden">
+        <div class="app-container">
+            <aside class="nav-sidebar">
+                <div class="brand-box">
+                    <div class="brand-logo"><i class="fas fa-bolt"></i></div>
+                    <h2>AURORA</h2>
+                </div>
+
+                <p class="section-label">Active Matrix</p>
+                <div class="room-pill active">
+                    <i class="fas fa-hashtag"></i>
+                    <span id="current-room-text">General</span>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-flex">
+                        <div class="user-pfp" id="my-pfp">?</div>
+                        <div>
+                            <p style="font-weight: 700;" id="my-identity">User</p>
+                            <p style="font-size: 0.75rem; color: var(--s-2);">Connected Live</p>
+                        </div>
+                    </div>
+                    <button class="btn-logout" onclick="leaveChat()"><i class="fas fa-power-off"></i> Termininate
+                        Session</button>
+                </div>
+            </aside>
+
+            <main class="chat-main">
+                <header class="chat-header">
+                    <div class="header-left">
+                        <p>Currently In</p>
+                        <h1 id="room-header-name"># General</h1>
+                    </div>
+                    <div class="header-right">
+                        <button class="tool-btn"><i class="fas fa-ellipsis-v"></i></button>
+                    </div>
+                </header>
+
+                <div id="chat-feed" class="chat-feed">
+                    <div class="sys-notif">A new connection has been synthesized. Welcome.</div>
+                </div>
+
+                <div class="chat-footer">
+                    <div class="input-bar">
+                        <div class="tool-btns">
+                            <button class="tool-btn" onclick="applyFormat('bold')"><i class="fas fa-bold"></i></button>
+                            <button class="tool-btn" onclick="applyFormat('italic')"><i
+                                    class="fas fa-italic"></i></button>
+                            <button class="tool-btn" onclick="insertLink()"><i class="fas fa-link"></i></button>
+                        </div>
+                        <input type="text" id="message-input" placeholder="Type your magic here..."
+                            onkeypress="handleKeyPress(event)">
+                        <button class="btn-shoot" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let myName = "";
+
+        const authEl = document.getElementById('auth-view');
+        const appEl = document.getElementById('app-view');
+        const feedEl = document.getElementById('chat-feed');
+        const inputEl = document.getElementById('message-input');
+        const errorEl = document.getElementById('login-error');
+
+        function joinChat() {
+            const user = document.getElementById('username-input').value.trim();
+            const room = document.getElementById('room-input').value.trim();
+
+            if (!user || !room) {
+                showErr("Identity and Matrix required.");
+                return;
+            }
+
+            const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${location.host}/ws/${room}/${user}`);
+
+            ws.onopen = () => {
+                myName = user;
+                authEl.classList.add('hidden');
+                appEl.classList.remove('hidden');
+                document.getElementById('room-header-name').innerText = `# ${room}`;
+                document.getElementById('current-room-text').innerText = room;
+                document.getElementById('my-identity').innerText = user;
+                document.getElementById('my-pfp').innerText = user.charAt(0).toUpperCase();
+                showSys("Matrix link established. Uplink OK.");
+            };
+
+            ws.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                if (data.type === 'error') {
+                    showErr(data.message);
+                    ws.close();
+                    return;
+                }
+                renderMsg(data);
+            };
+
+            ws.onclose = () => {
+                leaveChat();
+                showErr("Matrix link severed.");
+            };
+
+            ws.onerror = () => showErr("Synthesis failure. Core offline.");
+        }
+
+        function leaveChat() {
+            if (ws) ws.close();
+            authEl.classList.remove('hidden');
+            appEl.classList.add('hidden');
+            feedEl.innerHTML = '<div class="sys-notif">A new connection has been synthesized. Welcome.</div>';
+        }
+
+        function sendMessage() {
+            const val = inputEl.value.trim();
+            if (!val || ws.readyState !== WebSocket.OPEN) return;
+            ws.send(JSON.stringify({ text: val }));
+            inputEl.value = "";
+        }
+
+        function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
+
+        function renderMsg(data) {
+            if (data.type === 'system') {
+                showSys(data.text);
+                return;
+            }
+            const isMe = data.sender === myName;
+            const container = document.createElement('div');
+            container.className = `msg-container ${isMe ? 'own' : 'other'}`;
+
+            const html = formatMsg(data.text);
+            container.innerHTML = `
+                <span class="msg-name">${isMe ? 'You' : data.sender}</span>
+                <div class="msg-bubble">${html}</div>
+                <span class="msg-time">${data.timestamp}</span>
+            `;
+            feedEl.appendChild(container);
+            feedEl.scrollTop = feedEl.scrollHeight;
+            if (!isMe && document.hidden) notify(data.sender, data.text);
+        }
+
+        function showSys(txt) {
+            const div = document.createElement('div');
+            div.className = 'sys-notif';
+            div.innerText = txt;
+            feedEl.appendChild(div);
+            feedEl.scrollTop = feedEl.scrollHeight;
+        }
+
+        function formatMsg(t) {
+            let s = t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+            let f = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color: #00dfd8;">$1</a>');
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return f.replace(urlRegex, (u) => f.includes('href="' + u + '"') ? u : `<a href="${u}" target="_blank" style="color: #00dfd8;">${u}</a>`);
+        }
+
+        function showErr(m) {
+            errorEl.innerText = m;
+            setTimeout(() => { if (errorEl.innerText === m) errorEl.innerText = ""; }, 4000);
+        }
+
+        function applyFormat(type) {
+            const s = inputEl.selectionStart, e = inputEl.selectionEnd, v = inputEl.value;
+            const sel = v.substring(s, e);
+            inputEl.value = v.substring(0, s) + (type === 'bold' ? `**${sel}**` : `*${sel}*`) + v.substring(e);
+            inputEl.focus();
+        }
+
+        function insertLink() {
+            const url = prompt("Link URL:");
+            if (!url) return;
+            const s = inputEl.selectionStart, e = inputEl.selectionEnd, v = inputEl.value;
+            const sel = v.substring(s, e) || "link";
+            inputEl.value = v.substring(0, s) + `[${sel}](${url})` + v.substring(e);
+            inputEl.focus();
+        }
+
+        function notify(s, t) {
+            if (Notification.permission === "granted") new Notification(`Aurora: ${s}`, { body: t });
+            else if (Notification.permission !== "denied") Notification.requestPermission();
+        }
+    </script>
+</body>
+
+</html>
