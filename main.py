@@ -68,4 +68,10 @@ async def broadcast_to_room(room_name: str, message: dict):
         for connection in rooms[room_name]:
             await connection.send_text(json.dumps(message))
 
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+@app.get("/", response_class=HTMLResponse)
+async def get():
+    with open("index.html", "r", encoding="utf-8") as f:
+        return f.read()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
