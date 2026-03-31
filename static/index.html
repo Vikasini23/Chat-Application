@@ -211,6 +211,7 @@
             overflow: hidden;
             box-shadow: 0 50px 100px rgba(0, 0, 0, 0.4);
             animation: appScale 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-direction: column;
         }
 
         @keyframes appScale {
@@ -572,7 +573,7 @@
 
             .app-container {
                 width: 100vw;
-                height: 100vh;
+                height: 100dvh;
                 margin: 0;
                 border-radius: 0;
             }
@@ -587,6 +588,8 @@
 
             .chat-feed {
                 padding: 1rem;
+                flex: 1;
+                overflow-y: auto;
             }
 
             .msg-container {
@@ -597,7 +600,14 @@
                 position: sticky;
                 bottom: 0;
                 padding: 0.8rem;
+                background: rgba(0, 0, 0, 0.6);
+                backdrop-filter: blur(10px);
+                padding-bottom: calc(0.8rem + env(safe-area-inset-bottom));
             }
+            .input-bar {
+                margin-bottom: 8px;
+            }
+            
         }
     </style>
 </head>
