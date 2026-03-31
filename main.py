@@ -69,7 +69,7 @@ async def broadcast_to_room(room_name: str, message: dict):
 
 @app.get("/", response_class=HTMLResponse)
 async def get():
-    with open("index.html", "r", encoding="utf-8") as f:
+    with open("static/index.html", "r", encoding="utf-8") as f:
         return f.read()
 
 
