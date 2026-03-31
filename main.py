@@ -1,5 +1,4 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 import json
 from datetime import datetime
@@ -73,5 +72,5 @@ async def get():
     with open("index.html", "r", encoding="utf-8") as f:
         return f.read()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
