@@ -32,11 +32,11 @@
 
         body {
             background: var(--bg-dark);
-            min-height: 100vh;
-            overflow-x: hidden;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            justify-content:flex-start;
+            align-items: flex-start;
             color: var(--text-main);
         }
 
@@ -198,8 +198,9 @@
 
         /* --- MAIN APP: MODERN DASHBOARD --- */
         .app-container {
-            width: 96vw;
-            height: 94vh;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
             max-width: 1500px;
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(20px);
@@ -339,6 +340,7 @@
 
         /* --- CHAT AREA: GLASSY & VIBRANT --- */
         .chat-main {
+            width: 100%;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -380,7 +382,7 @@
         .msg-container {
             display: flex;
             flex-direction: column;
-            max-width: 75%;
+            max-width: 95%;
             animation: msgPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -457,6 +459,9 @@
         /* --- COMPOSER: NEON GLASS --- */
         .chat-footer {
             padding: 2rem 3rem 3rem;
+            position: sticky;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
         }
 
         .input-bar {
@@ -558,57 +563,44 @@
                 border-radius: 0;
             }
         }
-        /* 🔥 MOBILE FIX */
         @media (max-width: 768px) {
 
             body {
-        overflow-y: auto;
-        height: auto;
+                align-items: flex-start;
+                justify-content: flex-start;
             }
 
-    .app-container {
-        flex-direction: column;
-        width: 100%;
-        height: 100vh;
-        border-radius: 0;
+            .app-container {
+                width: 100vw;
+                height: 100vh;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .chat-main {
+                width: 100%;
+            }
+
+            .chat-header {
+                padding: 1rem;
+            }
+
+            .chat-feed {
+                padding: 1rem;
+            }
+
+            .msg-container {
+                max-width: 95%;
+            }
+
+            .chat-footer {
+                position: sticky;
+                bottom: 0;
+                padding: 0.8rem;
+            }
         }
-
-    .chat-header {
-        padding: 1rem;
-        height: auto;
-    }
-
-    .chat-feed {
-        padding: 1rem;
-        gap: 1rem;
-    }
-
-    .msg-container {
-        max-width: 90%;
-    }
-
-    .chat-footer {
-        padding: 1rem;
-    }
-
-    .input-bar {
-        flex-direction: row;
-        gap: 8px;
-    }
-
-    #message-input {
-        font-size: 1rem;
-        padding: 10px;
-    }
-
-    .btn-shoot {
-        width: 45px;
-        height: 45px;
-    }
-    }
     </style>
 </head>
-
 <body>
     <div class="mesh-bg"></div>
 
